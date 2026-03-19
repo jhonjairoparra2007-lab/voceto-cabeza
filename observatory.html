@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>OBSERVATORY — Barbería Cósmica · Cali</title>
+<link rel="stylesheet" href="observatory.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- ═══════ GLOBAL LAYERS ═══════ -->
+<canvas id="starCanvas"   class="gl-canvas stars-canvas"></canvas>
+<canvas id="auroraCanvas" class="gl-canvas aurora-canvas"></canvas>
+<canvas id="dustCanvas"   class="gl-canvas dust-canvas"></canvas>
+<div class="gl-vignette"></div>
+
+<!-- ═══════ BOOT SEQUENCE ═══════ -->
+<div id="bootScreen">
+  <div class="boot-wrap">
+    <div class="boot-logo">
+      <svg viewBox="0 0 120 120" class="boot-svg" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="60" cy="60" r="56" fill="none" stroke="rgba(100,200,255,0.15)" stroke-width="1"/>
+        <circle cx="60" cy="60" r="40" fill="none" stroke="rgba(100,200,255,0.25)" stroke-width="1"/>
+        <circle cx="60" cy="60" r="22" fill="none" stroke="rgba(100,200,255,0.4)" stroke-width="1.5"/>
+        <circle cx="60" cy="60" r="8"  fill="#64c8ff" opacity="0.9">
+          <animate attributeName="opacity" values="0.9;0.4;0.9" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <!-- Orbiting dot -->
+        <circle cx="60" cy="18" r="4" fill="#c8a030">
+          <animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="3s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="60" cy="6"  r="3" fill="#7a4af0">
+          <animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="5s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+    <div class="boot-name">OBSERVATORY</div>
+    <div class="boot-sub">BARBERÍA CÓSMICA · CALI · EST. 2019</div>
+    <div class="boot-log" id="bootLog"></div>
+    <div class="boot-bar-wrap"><div class="boot-bar" id="bootBar"></div></div>
+    <button class="boot-enter" id="bootEnter" style="display:none" onclick="enterObs()">
+      ◉ ENTRAR AL SISTEMA SOLAR
+    </button>
+  </div>
+</div>
+
+<!-- ═══════ NAV ═══════ -->
+<nav class="obs-nav" id="obsNav">
+  <div class="on-logo" onclick="document.getElementById('hero').scrollIntoView({behavior:'smooth'})">
+    <div class="onl-orb"></div>
+    <div><span class="onl-name">OBSERVATORY</span><span class="onl-sub">CALI</span></div>
+  </div>
+  <div class="on-links">
+    <a href="#solar"      class="on-link">Sistema Solar</a>
+    <a href="#constelaciones" class="on-link">Constelaciones</a>
+    <a href="#telescopio" class="on-link">Telescopio</a>
+    <a href="#transmision" class="on-link">Transmisión</a>
+    <a href="#galaxia"    class="on-link">Galaxia</a>
+  </div>
+  <div class="on-right">
+    <div class="on-coords" id="onCoords">α 07h 29m · δ +03° 22′</div>
+    <button class="on-cta" onclick="document.getElementById('transmision').scrollIntoView({behavior:'smooth'})">
+      ◉ Agendar
+    </button>
+    <button class="on-ham" id="onHam"><i class="fas fa-bars"></i></button>
+  </div>
+</nav>
+<div class="on-mob" id="onMob">
+  <a href="#solar"          onclick="closeMob()">Sistema Solar</a>
+  <a href="#constelaciones" onclick="closeMob()">Constelaciones</a>
+  <a href="#telescopio"     onclick="closeMob()">Telescopio</a>
+  <a href="#transmision"    onclick="closeMob()">Transmisión</a>
+  <a href="#galaxia"        onclick="closeMob()">Galaxia</a>
+</div>
+
+<!-- ═══════ HERO ═══════ -->
+<section class="section-hero" id="hero">
+  <div class="hero-content">
+    <div class="hero-label">COORDENADAS: 3°27′N 76°32′O · CALI, COLOMBIA</div>
+    <h1 class="hero-title">
+      <span class="ht-obs">OBSERVATORY</span>
+      <span class="ht-sub">Donde cada corte es un<em> evento astronómico</em></span>
+    </h1>
+    <p class="hero-desc">
+      No somos una barbería. Somos un observatorio donde tu transformación 
+      es calibrada con la precisión de las estrellas. Cada barbero, un planeta. 
+      Cada corte, una constelación nueva.
+    </p>
+    <div class="hero-stats">
+      <div class="hs"><span class="hs-n" data-target="6">0</span><span class="hs-l">Planetas</span></div>
+      <div class="hs-sep">·</div>
+      <div class="hs"><span class="hs-n" data-target="12000">0</span><span class="hs-l">Órbitas completadas</span></div>
+      <div class="hs-sep">·</div>
+      <div class="hs"><span class="hs-n" data-target="5">0</span><span class="hs-l">Años en el cosmos</span></div>
+    </div>
+    <div class="hero-btns">
+      <button class="btn-cosmos" onclick="document.getElementById('solar').scrollIntoView({behavior:'smooth'})">
+        ◎ Explorar el Sistema Solar
+      </button>
+      <button class="btn-ghost-cosmos" onclick="document.getElementById('telescopio').scrollIntoView({behavior:'smooth'})">
+        ◈ Usar el Telescopio
+      </button>
+    </div>
+  </div>
+
+  <!-- Floating orbital rings decoration -->
+  <div class="hero-orbitals">
+    <div class="hor-ring r1"></div>
+    <div class="hor-ring r2"></div>
+    <div class="hor-ring r3"></div>
+    <div class="hor-planet p1"></div>
+    <div class="hor-planet p2"></div>
+    <div class="hor-planet p3"></div>
+  </div>
+
+  <div class="hero-scroll-hint">
+    <div class="hsh-line"></div>
+    <span>DESPLÁZATE PARA EXPLORAR</span>
+    <div class="hsh-line"></div>
+  </div>
+</section>
+
+<!-- ═══════ SISTEMA SOLAR ═══════ -->
+<section class="section-solar" id="solar">
+  <div class="container">
+    <div class="cosmos-header">
+      <div class="csh-label">SECCIÓN I — SISTEMA SOLAR</div>
+      <h2 class="csh-title">Los <em>Planetas</em> del Observatorio</h2>
+      <p class="csh-sub">Cada barbero es un mundo con su propia atmósfera, especialidad y gravitación.</p>
+    </div>
+  </div>
+
+  <!-- 3D Solar system -->
+  <div class="solar-viewport" id="solarViewport">
+    <div class="solar-scene" id="solarScene">
+      <!-- Sun (logo / center) -->
+      <div class="solar-sun" id="solarSun">
+        <div class="sun-corona"></div>
+        <div class="sun-core">
+          <span>⊙</span>
+        </div>
+        <div class="sun-label">OBSERVATORY</div>
+      </div>
+      <!-- Planets injected by JS -->
+      <div id="planetsWrap"></div>
+    </div>
+  </div>
+
+  <!-- Planet detail panel (appears when clicking a planet) -->
+  <div class="planet-detail" id="planetDetail" style="display:none">
+    <button class="pd-close" onclick="closePlanet()">✕</button>
+    <div class="pd-orb" id="pdOrb"></div>
+    <div class="pd-codename" id="pdCodename">PLANETA ∅</div>
+    <div class="pd-name"     id="pdName">—</div>
+    <div class="pd-role"     id="pdRole">—</div>
+    <div class="pd-stats">
+      <div class="pds"><span>Órbitas</span><strong id="pdsOrbits">—</strong></div>
+      <div class="pds"><span>Especialidad</span><strong id="pdsSpec">—</strong></div>
+      <div class="pds"><span>Rating</span><strong id="pdsRating">—</strong></div>
+    </div>
+    <p class="pd-bio" id="pdBio">—</p>
+    <button class="btn-cosmos" onclick="bookPlanet()" style="width:100%;justify-content:center">
+      ◎ Agendar con este planeta
+    </button>
+  </div>
+</section>
+
+<!-- ═══════ CONSTELACIONES / SERVICIOS ═══════ -->
+<section class="section-dark" id="constelaciones">
+  <div class="container">
+    <div class="cosmos-header">
+      <div class="csh-label">SECCIÓN II — CONSTELACIONES</div>
+      <h2 class="csh-title">El <em>Mapa Estelar</em> de Servicios</h2>
+      <p class="csh-sub">Cada servicio forma una constelación única. Encuentra la tuya.</p>
+    </div>
+
+    <!-- Constellation filter -->
+    <div class="const-filters" id="constFilters"></div>
+
+    <!-- Constellation cards grid -->
+    <div class="const-grid" id="constGrid"></div>
+  </div>
+</section>
+
+<!-- ═══════ TELESCOPIO INTERACTIVO ═══════ -->
+<section class="section-telescope" id="telescopio">
+  <div class="container">
+    <div class="cosmos-header">
+      <div class="csh-label">SECCIÓN III — TELESCOPIO INTERACTIVO</div>
+      <h2 class="csh-title">El <em>Telescopio</em> del Observatorio</h2>
+      <p class="csh-sub">Arrastra el ocular. Apunta a cualquier zona del cosmos para descubrir servicios y detalles.</p>
+    </div>
+  </div>
+
+  <div class="telescope-wrap" id="telescopeWrap">
+    <!-- Sky to explore -->
+    <canvas id="telescopeSky" class="tele-sky"></canvas>
+    <!-- Draggable ocular -->
+    <div class="tele-ocular" id="teleOcular">
+      <div class="to-outer-ring"></div>
+      <div class="to-inner-ring"></div>
+      <div class="to-crosshair h"></div>
+      <div class="to-crosshair v"></div>
+      <div class="to-lens-glare"></div>
+      <div class="to-zoom-label">×40</div>
+    </div>
+    <!-- Info popup that follows telescope -->
+    <div class="tele-popup" id="telePopup" style="display:none">
+      <div class="tp-header" id="tpHeader">—</div>
+      <div class="tp-body"   id="tpBody">—</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ TRANSMISIÓN / RESERVA ═══════ -->
+<section class="section-dark" id="transmision">
+  <div class="container">
+    <div class="cosmos-header">
+      <div class="csh-label">SECCIÓN IV — TRANSMISIÓN INTERGALÁCTICA</div>
+      <h2 class="csh-title">Envía tu <em>Señal al Cosmos</em></h2>
+      <p class="csh-sub">Completa tu transmisión. Recibiremos tu señal en menos de 30 minutos terrestres.</p>
+    </div>
+
+    <div class="trans-layout">
+      <!-- Booking form: looks like a mission control panel -->
+      <div class="mission-control">
+        <div class="mc-header">
+          <div class="mc-led active"></div>
+          <span>PANEL DE CONTROL — MISIÓN EN CURSO</span>
+          <div class="mc-freq" id="mcFreq">FREQ: ░░░░</div>
+        </div>
+
+        <!-- Step I: Planet (barbero) -->
+        <div class="mc-step active" id="mcs1">
+          <div class="mcs-title">I — SELECCIONA TU PLANETA</div>
+          <div class="planet-pick" id="planetPick"></div>
+        </div>
+
+        <!-- Step II: Constellation (servicio) -->
+        <div class="mc-step" id="mcs2">
+          <div class="mcs-title">II — ELIGE TU CONSTELACIÓN</div>
+          <div class="const-pick" id="constPick"></div>
+          <button class="mc-back" onclick="goStep(1)">◄ ANTERIOR</button>
+        </div>
+
+        <!-- Step III: Launch window (fecha/hora) -->
+        <div class="mc-step" id="mcs3">
+          <div class="mcs-title">III — VENTANA DE LANZAMIENTO</div>
+          <input type="date" id="txDate" class="cosmos-input" style="margin-bottom:12px"/>
+          <div class="launch-windows" id="launchWindows">
+            <p class="cosmos-hint">Selecciona una fecha para ver ventanas disponibles</p>
+          </div>
+          <button class="mc-back" onclick="goStep(2)">◄ ANTERIOR</button>
+        </div>
+
+        <!-- Step IV: Astronaut data + payment -->
+        <div class="mc-step" id="mcs4">
+          <div class="mcs-title">IV — DATOS DEL ASTRONAUTA</div>
+          <div class="cosmos-fields">
+            <input type="text"  id="txName"  placeholder="NOMBRE COMPLETO"     class="cosmos-input"/>
+            <input type="tel"   id="txPhone" placeholder="TELÉFONO / WHATSAPP" class="cosmos-input"/>
+            <input type="email" id="txEmail" placeholder="CORREO ELECTRÓNICO"  class="cosmos-input"/>
+            <select id="txMotivo" class="cosmos-input">
+              <option value="">MOTIVO DEL VIAJE (opcional)</option>
+              <option>🎂 Cumpleaños</option>
+              <option>💼 Reunión importante</option>
+              <option>💕 Cita especial</option>
+              <option>🎉 Celebración</option>
+              <option>🚀 Primera vez en el cosmos</option>
+            </select>
+            <textarea id="txNota" placeholder="MENSAJE PARA EL PLANETA..." class="cosmos-input" rows="2" style="grid-column:1/-1"></textarea>
+          </div>
+
+          <!-- Payment: "método de transmisión de energía" -->
+          <div class="energy-panel">
+            <div class="ep-title">V — TRANSFERENCIA DE ENERGÍA</div>
+            <div class="ep-grid">
+              <div class="ep-opt" id="ep-cash"     onclick="selPay('cash',this)">
+                <div class="ep-pulse" id="epp-cash"></div>
+                <span class="ep-icon">💵</span>
+                <span class="ep-name">EFECTIVO</span>
+                <span class="ep-sub">Al aterrizar</span>
+              </div>
+              <div class="ep-opt" id="ep-nequi"    onclick="selPay('nequi',this)">
+                <div class="ep-pulse" id="epp-nequi"></div>
+                <span class="ep-icon">
+                  <svg width="28" height="28" viewBox="0 0 28 28"><rect width="28" height="28" rx="7" fill="#6C0CE0"/><text x="14" y="20" text-anchor="middle" font-family="Arial Black" font-size="12" font-weight="900" fill="white">N</text></svg>
+                </span>
+                <span class="ep-name">NEQUI</span>
+                <span class="ep-sub">317 890 1234</span>
+              </div>
+              <div class="ep-opt" id="ep-daviplata" onclick="selPay('daviplata',this)">
+                <div class="ep-pulse" id="epp-daviplata"></div>
+                <span class="ep-icon">
+                  <svg width="28" height="28" viewBox="0 0 28 28"><rect width="28" height="28" rx="7" fill="#E30613"/><text x="14" y="19" text-anchor="middle" font-family="Arial Black" font-size="9" font-weight="900" fill="white">DV</text></svg>
+                </span>
+                <span class="ep-name">DAVIPLATA</span>
+                <span class="ep-sub">317 890 1234</span>
+              </div>
+              <div class="ep-opt" id="ep-transfer"  onclick="selPay('transfer',this)">
+                <div class="ep-pulse" id="epp-transfer"></div>
+                <span class="ep-icon">🏦</span>
+                <span class="ep-name">TRANSFER</span>
+                <span class="ep-sub">PSE / Banco</span>
+              </div>
+            </div>
+            <div class="ep-copy-strip" id="epCopyStrip" style="display:none">
+              <span class="epcs-lbl" id="epcsLbl">NÚMERO:</span>
+              <span class="epcs-num">317 890 1234</span>
+              <button class="epcs-btn" onclick="copyNum()">◎ COPIAR</button>
+            </div>
+            <div class="ep-msg" id="epMsg"></div>
+          </div>
+
+          <button class="btn-cosmos full-cosmos" onclick="launchMission()">
+            🚀 LANZAR TRANSMISIÓN
+          </button>
+          <button class="mc-back" onclick="goStep(3)">◄ ANTERIOR</button>
+        </div>
+      </div>
+
+      <!-- Right: Orbit tracker / summary -->
+      <div class="orbit-tracker">
+        <div class="ot-screen">
+          <div class="ot-screen-inner">
+            <!-- Mini solar system animation -->
+            <div class="ot-sun"></div>
+            <div class="ot-orbit o1"><div class="ot-planet" id="otp1"></div></div>
+            <div class="ot-orbit o2"><div class="ot-planet" id="otp2"></div></div>
+            <div class="ot-orbit o3"><div class="ot-planet" id="otp3"></div></div>
+          </div>
+        </div>
+        <div class="ot-data">
+          <div class="otd-row"><span>PLANETA</span><strong id="otd-p">—</strong></div>
+          <div class="otd-row"><span>CONSTELACIÓN</span><strong id="otd-c">—</strong></div>
+          <div class="otd-row"><span>ENERGÍA</span><strong id="otd-e">—</strong></div>
+          <div class="otd-row"><span>VENTANA</span><strong id="otd-d">—</strong></div>
+          <div class="otd-row"><span>HORA</span><strong id="otd-h">—</strong></div>
+          <div class="otd-row"><span>TRANSMISIÓN</span><strong id="otd-pay">—</strong></div>
+        </div>
+        <div class="ot-horario">
+          <div class="oth-title">◉ VENTANAS DE LANZAMIENTO</div>
+          <div class="oth-row"><span>Lun – Vie</span><span>8:00 – 20:00</span></div>
+          <div class="oth-row"><span>Sábado</span><span>8:00 – 18:00</span></div>
+          <div class="oth-row"><span>Domingo</span><span>9:00 – 14:00</span></div>
+        </div>
+        <div class="ot-addr">📡 Cra 9 #13N-42 · Granada · Cali</div>
+        <a class="ot-wa" href="https://wa.me/573178901234" target="_blank">
+          <i class="fab fa-whatsapp"></i> Canal de emergencia
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LAUNCH CONFIRMATION MODAL -->
+<div class="cosmos-modal" id="launchModal">
+  <div class="cm-box">
+    <canvas class="cm-particles" id="cmParticles"></canvas>
+    <div class="cm-content">
+      <div class="cm-icon">🚀</div>
+      <div class="cm-title">¡TRANSMISIÓN ENVIADA!</div>
+      <div class="cm-orbit-line"></div>
+      <p id="cmText"></p>
+      <button class="btn-cosmos" onclick="closeModal()">◎ DE VUELTA AL COSMOS</button>
+    </div>
+  </div>
+  <div class="cm-bg" onclick="closeModal()"></div>
+</div>
+
+<!-- ═══════ GALAXIA / ABOUT ═══════ -->
+<section class="section-dark" id="galaxia">
+  <div class="container">
+    <div class="cosmos-header">
+      <div class="csh-label">SECCIÓN V — GALAXIA</div>
+      <h2 class="csh-title">El <em>Centro</em> de la Galaxia</h2>
+      <p class="csh-sub">Los fundadores que pusieron en órbita este universo desde Cali.</p>
+    </div>
+
+    <div class="galaxy-layout">
+      <div class="galaxy-left">
+        <!-- Founders -->
+        <div class="founders-cosmos">
+          <div class="fc-card">
+            <div class="fc-planet" style="background:radial-gradient(circle at 35% 35%,#e8c050,#c8a030,#6b4a00)">JJ</div>
+            <div class="fc-info">
+              <div class="fc-codename">PLANETA AURUM</div>
+              <div class="fc-name">Jhon Jairo Parra</div>
+              <div class="fc-role">Director & Fundador del Observatorio</div>
+              <p class="fc-bio">"Empezamos con unas tijeras y la certeza de que un buen corte puede cambiar cómo te ves a ti mismo. El cosmos empezó en un local de 12 metros cuadrados en San Antonio."</p>
+              <div class="fc-specs">
+                <span>12+ años</span><span>Degradados</span><span>Navaja</span><span>Barbas</span>
+              </div>
+            </div>
+          </div>
+          <div class="fc-card">
+            <div class="fc-planet" style="background:radial-gradient(circle at 35% 35%,#a070ff,#7a4af0,#3a1a80)">SB</div>
+            <div class="fc-info">
+              <div class="fc-codename">PLANETA VELA</div>
+              <div class="fc-name">Sebastián Banguera</div>
+              <div class="fc-role">Co-Fundador & Director Creativo</div>
+              <p class="fc-bio">"El Observatorio es un experimento: ¿qué pasa cuando tratas cada corte como una obra de arte? La respuesta es lo que somos hoy."</p>
+              <div class="fc-specs">
+                <span>10+ años</span><span>Modernos</span><span>Coloración</span><span>Textura</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact -->
+        <div class="cosmos-contact">
+          <div class="cc-item"><i class="fas fa-map-marker-alt"></i><div><strong>Coordenadas terrestres</strong><p>Cra 9 #13N-42, Granada, Cali</p></div></div>
+          <div class="cc-item"><i class="fas fa-satellite-dish"></i><div><strong>Frecuencia de contacto</strong><p>+57 317 890 1234</p></div></div>
+          <div class="cc-item"><i class="fab fa-instagram"></i><div><strong>Señal visual</strong><p>@observatorycali</p></div></div>
+          <div class="cc-item"><i class="fab fa-whatsapp"></i><div><strong>Canal seguro</strong><p>+57 317 890 1234</p></div></div>
+        </div>
+        <a class="btn-cosmos" href="https://www.google.com/maps/dir/?api=1&destination=Cra+9+13N-42+Granada+Cali" target="_blank">
+          <i class="fas fa-route"></i> Trazar órbita de llegada
+        </a>
+      </div>
+      <div class="galaxy-map">
+        <div class="gmap-overlay">COORDENADAS CLASIFICADAS<br/>3°27′N — 76°32′O</div>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127500!2d-76.5225!3d3.4516!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e30a6f0cc4bb3f1%3A0x1f0fb5e952ae6168!2sCali%2C%20Valle%20del%20Cauca!5e0!3m2!1ses!2sco!4v1680000000000" width="100%" height="100%" style="border:0;" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer-cosmos">
+  <div class="fc-inner">
+    <div class="fc-brand">
+      <div class="fcb-orb"></div>
+      <div>
+        <div class="fcb-name">OBSERVATORY</div>
+        <div class="fcb-sub">BARBERÍA CÓSMICA · CALI · EST. 2019</div>
+      </div>
+    </div>
+    <p class="fc-quote">"No cortamos cabello. Calibramos identidades con la precisión del cosmos."</p>
+    <div class="fc-social">
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-tiktok"></i></a>
+      <a href="#"><i class="fab fa-facebook"></i></a>
+      <a href="#"><i class="fab fa-whatsapp"></i></a>
+      <a href="#"><i class="fab fa-spotify"></i></a>
+    </div>
+    <div class="fc-coords">
+      ◉ COORDS: 3°27′N 76°32′O · FREQ: 317.890 MHz · OBSERVATORY CALI © 2024
+    </div>
+  </div>
+</footer>
+
+<script src="observatory.js"></script>
+</body>
+</html>
